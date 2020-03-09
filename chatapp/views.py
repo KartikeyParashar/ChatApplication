@@ -15,10 +15,9 @@ from rest_framework.views import APIView
 from .forms import RegistrationForm, LoginForm, ForgotPasswordForm, ResetForm
 from .rediss import Redis
 
-load_dotenv()
+load_dotenv()  # For using .env file, we have to load this...
 
-redis = Redis()
-# obj.c
+redis = Redis()  # Object of Redis Class in redis.py file
 
 
 class RegistrationView(APIView):
@@ -43,9 +42,6 @@ class RegistrationView(APIView):
         user = User.objects.create_user(username=username, password=password, email=email)
         user.set_password(password)
 
-        # user.is_active = False
-        # user.save()
-
         token = jwt.encode({'id': user.id}, 'secret', algorithm='HS256').decode('utf-8')
 
         surl = get_surl(token)
@@ -57,7 +53,6 @@ class RegistrationView(APIView):
                                                         'token': surl[2]
                                                        })
         subject = f'Activation Link from {get_current_site(request).domain}'
-        # os.getenv("EMAIL"))
 
         send_mail(subject, message, os.getenv("EMAIL"), ['parasharkartikey@gmail.com'], fail_silently=False)
 
@@ -105,7 +100,6 @@ class LoginView(APIView):
         }
 
         username = request.data.get('username')
-        # password = request.data.get('password')
 
         user = User.objects.get(username=username)
         print(user)
@@ -199,7 +193,6 @@ class ResetPassword(APIView):
             "data": []
         }
         password = request.data['password']
-        # confirm_password = request.data['confirm_password']
 
         token = ShortURL.objects.get(surl=token).lurl
 
@@ -208,8 +201,6 @@ class ResetPassword(APIView):
         user = User.objects.get(pk=id)
 
         new_password = user.set_password(password)
-        # new_password.set_password(new_password)
-        # new_password.save()
 
         response = {
             "success": True,
