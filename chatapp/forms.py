@@ -23,6 +23,6 @@ class ForgotPasswordForm(ModelForm):
 class ResetForm(ModelForm):
     class Meta:
         model = User
-        fields = ('email', 'username')
+        fields = ('password',)
 
 
