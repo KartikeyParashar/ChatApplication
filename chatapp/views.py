@@ -52,7 +52,7 @@ class RegistrationView(APIView):
 
         surl = surl.split("/")
 
-        message = render_to_string('activation.html',{'user': user,
+        message = render_to_string('activation.html', {'user': user,
                                                         'domain': get_current_site(request).domain,
                                                         'token': surl[2]
                                                        })
@@ -144,8 +144,8 @@ class LogoutView(APIView):
 
 
 class ForgotPassword(APIView):
-    import pdb
-    pdb.set_trace()
+    # import pdb
+    # pdb.set_trace()
 
     def get(self, request, *args, **kwargs):
         form = ForgotPasswordForm()
@@ -181,99 +181,66 @@ class ForgotPassword(APIView):
         return JsonResponse(data=response, status=status.HTTP_200_OK)
 
 
-def reset_password(request, token):
+class ResetPassword(APIView):
 
     # import pdb
     # pdb.set_trace()
 
-    response = {
-        "success": False,
-        "message": "User not Found",
-        "data": []
-    }
-    password = request.data['password']
+    def get(self, request, *args, **kwargs):
+        form = ResetForm()
+        return render(request, 'reset.html', {'form': form})
 
-    token1 = ShortURL.objects.get(surl=token)
-    token = token1.lurl
-    payload = jwt.decode(token, 'secret', algorithm='HS256')
-    id = payload['id']
-    user = User.objects.get(pk=id)
+    def post(self, request):
+        response = {
+            "success": False,
+            "message": "User not Found",
+            "data": []
+        }
+        password = request.data['password']
 
-    new_password = User.objects.create_user(password=password)
-    new_password.set_password(new_password)
-    new_password.save()
+        token1 = ShortURL.objects.get(surl=token)
+        token = token1.lurl
 
-    response = {
-        "success": True,
-        "message": "User password is reset Successfully",
-        "data": []
-    }
+        payload = jwt.decode(token, 'secret', algorithms='HS256')
+        user_id = payload.get('id')
 
-    return JsonResponse(data=response, status=status.HTTP_200_OK)
+        new_password = User.objects.create_user(password=password)
+        new_password.set_password(new_password)
+        new_password.save()
 
-# class ResetPassword(APIView):
+        response = {
+            "success": True,
+            "message": "User password is reset Successfully",
+            "data": []
+        }
+        return JsonResponse(data=response, status=status.HTTP_200_OK)
+
+
+# def reset_password(request, token):
 #
 #     # import pdb
 #     # pdb.set_trace()
 #
-#     def get(self, request, *args, **kwargs):
-#         form = ResetForm()
-#         return render(request, 'reset.html', {'form': form})
+#     response = {
+#         "success": False,
+#         "message": "User not Found",
+#         "data": []
+#     }
+#     password = request.data['password']
 #
-#     def post(self, request):
-#         response = {
-#             "success": False,
-#             "message": "User not Found",
-#             "data": []
-#         }
-#         password = request.data['password']
+#     token1 = ShortURL.objects.get(surl=token)
+#     token = token1.lurl
+#     payload = jwt.decode(token, 'secret', algorithm='HS256')
+#     id = payload['id']
+#     user = User.objects.get(pk=id)
 #
-#         token1 = ShortURL.objects.get(surl=token)
-#         token = token1.lurl
+#     new_password = User.objects.create_user(password=password)
+#     new_password.set_password(new_password)
+#     new_password.save()
 #
-#         payload = jwt.decode(token, 'secret', algorithms='HS256')
-#         user_id = payload.get('id')
-#
-#         new_password = User.objects.create_user(password=password)
-#         new_password.set_password(new_password)
-#         new_password.save()
-#
-#         response = {
-#             "success": True,
-#             "message": "User password is reset Successfully",
-#             "data": []
-#         }
-#         return JsonResponse(data=response, status=status.HTTP_200_OK)class ResetPassword(APIView):
-#
-#     # import pdb
-#     # pdb.set_trace()
-#
-#     def get(self, request, *args, **kwargs):
-#         form = ResetForm()
-#         return render(request, 'reset.html', {'form': form})
-#
-#     def post(self, request):
-#         response = {
-#             "success": False,
-#             "message": "User not Found",
-#             "data": []
-#         }
-#         password = request.data['password']
-#
-#         token1 = ShortURL.objects.get(surl=token)
-#         token = token1.lurl
-#
-#         payload = jwt.decode(token, 'secret', algorithms='HS256')
-#         user_id = payload.get('id')
-#
-#         new_password = User.objects.create_user(password=password)
-#         new_password.set_password(new_password)
-#         new_password.save()
-#
-#         response = {
-#             "success": True,
-#             "message": "User password is reset Successfully",
-#             "data": []
-#         }
-#         return JsonResponse(data=response, status=status.HTTP_200_OK)
-
+#     response = {
+#         "success": True,
+#         "message": "User password is reset Successfully",
+#         "data": []
+#     }
+#     return JsonResponse(data=response, status=status.HTTP_200_OK)
