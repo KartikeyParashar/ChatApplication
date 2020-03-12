@@ -34,8 +34,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-
+    'channels',
     'django_short_url',
+    'chatroom',
     'chatapp',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -74,7 +75,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ChatProject.wsgi.application'
+ASGI_APPLICATION = 'ChatProject.routing.application'
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

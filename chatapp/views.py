@@ -13,7 +13,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 from .forms import RegistrationForm, LoginForm, ForgotPasswordForm, ResetForm
-from .rediss import Redis
+from .redis_service import Redis
 
 load_dotenv()  # For using .env file, we have to load this...
 
@@ -208,3 +208,5 @@ class ResetPassword(APIView):
             "data": [token]
         }
         return JsonResponse(data=response, status=status.HTTP_200_OK)
+
+
