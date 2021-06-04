@@ -1,7 +1,7 @@
 channels==2.4.0
 channels-redis==2.4.2
 daphne==2.4.1
-Django==3.0.4
+Django==3.1.9
 django-admin==2.0.0
 django-short-url==1.1.4
 djangorestframework==3.11.0
